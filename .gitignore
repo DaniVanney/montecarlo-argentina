@@ -1,0 +1,9 @@
+# Cada usuario crea su propio entorno virtual.
+.venv/
+
+# Python genera estos archivos al ejecutar el código.
+__pycache__/
+*.pyc
+
+# Las contraseñas y otras configuraciones privadas quedan en este equipo.
+.env
