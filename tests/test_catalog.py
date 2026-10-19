@@ -17,3 +17,13 @@ class TestInstrument(unittest.TestCase):
     def test_rejects_whitespace_identifier(self):
         #Escribir espacios no debe permitir eludir la comprobación.
         with self.assertRaises(ValueError): Instrument(" ", "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+    def test_accepts_lider_panel(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "Líder", None)
+
+        self.assertEqual(instrument.panel, "Líder")
+
+
+    def test_rejects_unknown_panel(self):
+        #Un panel fuera del alcance debe impedir la creación del registro.
+        with self.assertRaises(ValueError):Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "Otro", None)

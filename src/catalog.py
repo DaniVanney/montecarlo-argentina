@@ -16,3 +16,6 @@ class Instrument:
         # Cada acción necesita un identificador para poder reconocerla en el catálogo.
         if not self.instrument_id.strip():
             raise ValueError("El identificador del instrumento no puede estar vacío.")
+
+        #La primera etapa del proyecto abarca estos paneles
+        if self.panel not in("Líder", "General"): raise ValueError("El panel debe ser Líder o General")
