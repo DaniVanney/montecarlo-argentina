@@ -27,3 +27,19 @@ class TestInstrument(unittest.TestCase):
     def test_rejects_unknown_panel(self):
         #Un panel fuera del alcance debe impedir la creación del registro.
         with self.assertRaises(ValueError):Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "Otro", None)
+
+    def test_rejects_missing_company_id(self):
+        for invalid_value in ("", " "):
+            with self.subTest(value= invalid_value):
+                with self.assertRaises(ValueError): Instrument("DEMO-A", invalid_value, "Empresa de ejemplo", "A", "General", None)
+
+    def test_rejects_missing_company_name(self):
+        for invalid_value in ("", " "):
+            with self.subTest(value=invalid_value):
+                with self.assertRaises(ValueError): Instrument("DEMO-A", "DEMO", invalid_value, "A", "General", None)
+
+
+    def test_rejects_missing_share_class(self):
+        for invalid_value in ("", " "):
+            with self.subTest(value= invalid_value):
+                with self.assertRaises(ValueError):Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", invalid_value, "General", None)
