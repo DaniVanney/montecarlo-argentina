@@ -57,4 +57,14 @@ class CatalogSnapshot:
                 raise ValueError("El catálogo contiene un identificador de instrumento repedido.")
 
             instrument_ids.add(instrument.instrument_id)
-        
+
+
+    def instruments_without_symbol(self) ->tuple[Instrument, ...]:
+        """Devuleve los instrumentos cuyo símbolo todavía están pendientes"""
+        pending_instruments =[]
+
+        for instrument in self.instruments:
+            if instrument.source_symbol is None:
+                pending_instruments.append(instrument)
+
+        return tuple(pending_instruments)

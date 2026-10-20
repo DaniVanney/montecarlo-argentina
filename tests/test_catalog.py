@@ -95,3 +95,25 @@ class TestCatalogSnapshot(unittest.TestCase):
 
         self.assertIn(instrument_a,catalog.instruments)
         self.assertIn(instrument_b, catalog.instruments)
+
+
+    def test_finds_instruments_without_symbol(self):
+        instrument_a = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", "DEMO-A.BA")
+
+        instrument_b = Instrument("DEMO-B", "DEMO", "Empresa de ejemplo", "B", "General", None)
+
+        instrument_c = Instrument("DEMO-C", "DEMO", "Empresa de ejemplo", "C", "General", None)
+
+        catalog = CatalogSnapshot(reference_date = date(2026, 10, 20), source_reference="Listado ficticio para pruebas", instruments= (instrument_a, instrument_b, instrument_c),)
+
+        pending = catalog.instruments_without_symbol()
+
+        self.assertEqual(pending, (instrument_b, instrument_c))
+        self.assertEqual(catalog.instruments, (instrument_a, instrument_b, instrument_c),)
+
+    def test_return_empty_tuple_when_all_symbols_are_prested(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", "DEMO-A.BA")
+
+        catalog = CatalogSnapshot(reference_date = date(2026, 10, 20), source_reference = "Listado ficticio para pruebas", instruments = (instrument,),)
+
+        self.assertEqual(catalog.instruments_without_symbol(), ())
