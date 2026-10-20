@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from datetime import date
+
 
 @dataclass(frozen=True)
 class Instrument:
@@ -32,3 +34,18 @@ class Instrument:
         #Si todvía no conocemos el símbolo, lo representamos con None.
         if self.source_symbol is not None and not self.source_symbol.strip():
             raise ValueError("El símbolo debe contener texto o ser None")
+
+
+@dataclass(frozen=True)
+class CatalogSnapshot:
+    """Conserva el listado de instrumentos correspondiente a una fecha"""
+
+    reference_date: date
+    source_reference: str
+    instruments: tuple[Instrument, ...]
+
+    def __post_init__(self) -> None:
+        #Guardamos la referencia para poder revisar el origen del listado.
+        if not self.source_reference.strip():
+            raise ValueError("La referencia de origen del catalogo no puede estar vacía.")
+        

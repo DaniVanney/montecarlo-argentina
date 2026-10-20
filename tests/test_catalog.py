@@ -1,6 +1,6 @@
 import unittest
-
-from src.catalog import Instrument
+from datetime import date
+from src.catalog import CatalogSnapshot, Instrument
 
 class TestInstrument(unittest.TestCase):
     """Comprueba las reglas del identificador de una acción"""
@@ -58,4 +58,21 @@ class TestInstrument(unittest.TestCase):
             with self.subTest(value=invalid_value):
                 with self.assertRaises(ValueError):
                     Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", invalid_value)
-    
+
+
+class TestCatalogSnapshot(unittest.TestCase):
+    """Comprueba la procedencia del catálogo y la conservación de sus instrumentos"""
+
+    def test_keeps_instrument_without_source_symbol(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+        catalog = CatalogSnapshot(reference_date = date(2026, 10, 20), source_reference= "Listado ficticio para pruebas", instruments=(instrument,),)
+
+        self.assertIn(instrument, catalog.instruments)
+
+    def test_rejects_blank_source_reference(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+        for invalid_value in ("", " "):
+            with self.subTest(value=invalid_value):
+                with self.assertRaises(ValueError): CatalogSnapshot(reference_date =date (2026, 10, 20), source_reference = invalid_value, instruments=(instrument,),)
