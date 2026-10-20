@@ -48,4 +48,13 @@ class CatalogSnapshot:
         #Guardamos la referencia para poder revisar el origen del listado.
         if not self.source_reference.strip():
             raise ValueError("La referencia de origen del catalogo no puede estar vacía.")
+
+        #Cada instrumento debe aparecer una sola vezz en esta versión del catálogo
+        instrument_ids = set()
+
+        for instrument in self.instruments:
+            if instrument.instrument_id in instrument_ids:
+                raise ValueError("El catálogo contiene un identificador de instrumento repedido.")
+
+            instrument_ids.add(instrument.instrument_id)
         

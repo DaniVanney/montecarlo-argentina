@@ -76,3 +76,22 @@ class TestCatalogSnapshot(unittest.TestCase):
         for invalid_value in ("", " "):
             with self.subTest(value=invalid_value):
                 with self.assertRaises(ValueError): CatalogSnapshot(reference_date =date (2026, 10, 20), source_reference = invalid_value, instruments=(instrument,),)
+
+
+    def tests_rejects_duplicates_instrument_id(self):
+        instrument_a = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+        #Asignamos a otra clase el mismo identificador para comprobar el rechazo
+        instrument_b = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "B", "General", None)
+
+        with self.assertRaises(ValueError): CatalogSnapshot(reference_date = date(2026, 10, 20), source_reference = "Listado ficticio para pruebas", instruments= (instrument_a, instrument_b),)
+
+    def test_accepts_differents_share_classes_from_same_company(self):
+        instrument_a = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+        instrument_b = Instrument("DEMO-B", "DEMO", "Empresa de ejemplo", "B", "General", None)
+
+        catalog = CatalogSnapshot(reference_date= date(2026, 10,20), source_reference=("Listado ficticio para pruebas"), instruments =(instrument_a, instrument_b),)
+
+        self.assertIn(instrument_a,catalog.instruments)
+        self.assertIn(instrument_b, catalog.instruments)
