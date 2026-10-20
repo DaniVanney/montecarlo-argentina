@@ -19,3 +19,16 @@ class Instrument:
 
         #La primera etapa del proyecto abarca estos paneles
         if self.panel not in("Líder", "General"): raise ValueError("El panel debe ser Líder o General")
+
+        if not self.company_id.strip():
+            raise ValueError("El identificador de la empresa no puede estar vacío.")
+
+        if not self.company_name.strip():
+            raise ValueError("El nombre de la empresa no puede estar vacío.")
+
+        if not self.share_class.strip():
+            raise ValueError("La clase de acción no puede estar vacía.")
+
+        #Si todvía no conocemos el símbolo, lo representamos con None.
+        if self.source_symbol is not None and not self.source_symbol.strip():
+            raise ValueError("El símbolo debe contener texto o ser None")

@@ -43,3 +43,19 @@ class TestInstrument(unittest.TestCase):
         for invalid_value in ("", " "):
             with self.subTest(value= invalid_value):
                 with self.assertRaises(ValueError):Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", invalid_value, "General", None)
+
+    def test_accepts_missing_source_symbol(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+        self.assertIsNone(instrument.source_symbol)
+
+    def test_accepts_source_symbol(self):
+        #Usamos un símbolo ficticio para probar cómo se guarda el campo
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", "DEMO.BA")
+        self.assertEqual(instrument.source_symbol, "DEMO.BA")
+
+    def test_rejects_blank_source_symbol(self):
+        for invalid_value in ("", " "):
+            with self.subTest(value=invalid_value):
+                with self.assertRaises(ValueError):
+                    Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", invalid_value)
+    
