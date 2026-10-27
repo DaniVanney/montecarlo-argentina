@@ -82,6 +82,11 @@ class TestInstrument(unittest.TestCase):
                 with self.assertRaises(TypeError):Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", invalid_value, None)
 
 
+    def test_rejects_non_text_source_symbol(self):
+        for invalid_value in(123, 0, False,[]):
+            with self.subTest(value = invalid_value):
+                with self.assertRaises(TypeError): Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", invalid_value)
+
 class TestCatalogSnapshot(unittest.TestCase):
     """Comprueba la procedencia del catálogo y la conservación de sus instrumentos"""
 

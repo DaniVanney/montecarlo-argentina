@@ -45,6 +45,8 @@ class Instrument:
             raise ValueError("La clase de acción no puede estar vacía.")
 
         #Si todvía no conocemos el símbolo, lo representamos con None.
+        if self.source_symbol is not None and not isinstance(self.source_symbol, str):
+            raise TypeError("El símbolo debe ser texto o ser None")
         if self.source_symbol is not None and not self.source_symbol.strip():
             raise ValueError("El símbolo debe contener texto o ser None")
 
