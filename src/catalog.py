@@ -69,12 +69,19 @@ class CatalogSnapshot:
         if not self.source_reference.strip():
             raise ValueError("La referencia de origen del catalogo no puede estar vacía.")
 
-        #Cada instrumento debe aparecer una sola vezz en esta versión del catálogo
+        #El listado de esta versión no debe cambair después de crearlo
+        if not isinstance(self.instruments, tuple):
+            raise TypeError("Los instrumentos del catálogo deben estar en una tupla")
+
         instrument_ids = set()
 
         for instrument in self.instruments:
+            if not isinstance(instrument, Instrument):
+                raise TypeError("Cada elemento del catálogo debe ser un Instrument.")
+
+        #Revisamos si ya encontramos este identificador en el listado
             if instrument.instrument_id in instrument_ids:
-                raise ValueError("El catálogo contiene un identificador de instrumento repedido.")
+                raise ValueError("El catálogo contiene un identificador de instrumento repetido")
 
             instrument_ids.add(instrument.instrument_id)
 

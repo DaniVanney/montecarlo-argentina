@@ -165,3 +165,19 @@ class TestCatalogSnapshot(unittest.TestCase):
         for invalid_value in (123, None):
             with self.subTest(value = invalid_value):
                 with self.assertRaises(TypeError): CatalogSnapshot(reference_date= date(2026, 10, 20), source_reference = invalid_value, instruments = (instrument,),)
+
+
+    def test_rejects_invalid_instruments_container(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+        #Una lista puede modificarse; el  catáogo necesita una tupla
+        for invalid_value in ([instrument], None, "DEMO-A"):
+            with self.assertRaises(TypeError): CatalogSnapshot(reference_date = date(2026, 10, 20), source_reference="Listado ficticio para pruebas", instruments=invalid_value,)
+
+    def test_rejects_invalid_in_tuple(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+        #Usar una tupla no alcanza: cada elemento debe ser un instrumento
+        for invalid_value in (123, None, "DEMO-A"):
+            with self.subTest(value = invalid_value):
+                with self.assertRaises(TypeError): CatalogSnapshot(reference_date = date(2026, 10,20), source_reference= "Listado ficticio para pruebas", instruments=(instrument, invalid_value),)
