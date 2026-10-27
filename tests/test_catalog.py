@@ -117,3 +117,8 @@ class TestCatalogSnapshot(unittest.TestCase):
         catalog = CatalogSnapshot(reference_date = date(2026, 10, 20), source_reference = "Listado ficticio para pruebas", instruments = (instrument,),)
 
         self.assertEqual(catalog.instruments_without_symbol(), ())
+
+    def test_rejects_non_text_instrument_id(self):
+        for invalid_value in (123, None):
+            with self.subTest(value = invalid_value):
+                with self.assertRaises(TypeError): Instrument(invalid_value, "DEMO", "Empresa de ejemplo", "A", "General", None)

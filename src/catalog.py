@@ -15,6 +15,10 @@ class Instrument:
     source_symbol: str | None
     
     def __post_init__(self) -> None:
+        # Comprobamos el tipo antes de usar operaciones de texto.
+        if not isinstance(self.instrument_id, str):
+            raise TypeError("El identificador del instrumento debe ser texto.")
+        
         # Cada acción necesita un identificador para poder reconocerla en el catálogo.
         if not self.instrument_id.strip():
             raise ValueError("El identificador del instrumento no puede estar vacío.")
