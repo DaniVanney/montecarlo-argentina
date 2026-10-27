@@ -158,3 +158,10 @@ class TestCatalogSnapshot(unittest.TestCase):
         for invalid_value in invalid_dates:
             with self.subTest(value= invalid_value):
                 with self.assertRaises(TypeError):CatalogSnapshot(reference_date = invalid_value, source_reference="Listado para prubas", isntrument=(instrument,),) 
+
+    def test_rejects_non_text_source_reference(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+        for invalid_value in (123, None):
+            with self.subTest(value = invalid_value):
+                with self.assertRaises(TypeError): CatalogSnapshot(reference_date= date(2026, 10, 20), source_reference = invalid_value, instruments = (instrument,),)

@@ -64,6 +64,8 @@ class CatalogSnapshot:
         if type(self.reference_date) is not date:
             raise TypeError("La fecha de referencia deber ser una fecha sin hora")
         #Guardamos la referencia para poder revisar el origen del listado.
+        if not isinstance(self.source_reference, str):
+            raise TypeError("La referencia de orígen del catálogo debe ser texto.")
         if not self.source_reference.strip():
             raise ValueError("La referencia de origen del catalogo no puede estar vacía.")
 
