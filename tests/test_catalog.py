@@ -1,5 +1,5 @@
 import unittest
-from datetime import date
+from datetime import date, datetime
 from src.catalog import CatalogSnapshot, Instrument
 
 class TestInstrument(unittest.TestCase):
@@ -149,3 +149,12 @@ class TestCatalogSnapshot(unittest.TestCase):
         for invalid_value in (123, None):
             with self.subTest(value = invalid_value):
                 with self.assertRaises(TypeError): Instrument(invalid_value, "DEMO", "Empresa de ejemplo", "A", "General", None)
+
+
+    def test_rejects_invalid_reference_date_type(self):
+        instrument = Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", None)
+        invalid_dates = ("2026-10.-20", None, datetime(2026, 10,20,12, 0))
+
+        for invalid_value in invalid_dates:
+            with self.subTest(value= invalid_value):
+                with self.assertRaises(TypeError):CatalogSnapshot(reference_date = invalid_value, source_reference="Listado para prubas", isntrument=(instrument,),) 

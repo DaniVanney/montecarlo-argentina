@@ -60,6 +60,9 @@ class CatalogSnapshot:
     instruments: tuple[Instrument, ...]
 
     def __post_init__(self) -> None:
+        #La fecha del listado se registra sin una hora asociada
+        if type(self.reference_date) is not date:
+            raise TypeError("La fecha de referencia deber ser una fecha sin hora")
         #Guardamos la referencia para poder revisar el origen del listado.
         if not self.source_reference.strip():
             raise ValueError("La referencia de origen del catalogo no puede estar vacía.")
