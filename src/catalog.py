@@ -20,6 +20,15 @@ class Instrument:
             raise TypeError("El identificador del instrumento debe ser texto.")
         
         # Cada acción necesita un identificador para poder reconocerla en el catálogo.
+        if not isinstance(self.company_id, str):
+            raise TypeError("El identificador de la empresa debe ser texto.")
+        if not isinstance(self.company_name, str):
+            raise TypeError("El nombre de la empresa debe ser texto.")
+        if not isinstance(self.share_class, str):
+            raise TypeError("La clase de acción debe ser texto.")
+        if not isinstance(self.panel, str):
+            raise TypeError("El panel debe ser texto.")
+
         if not self.instrument_id.strip():
             raise ValueError("El identificador del instrumento no puede estar vacío.")
 

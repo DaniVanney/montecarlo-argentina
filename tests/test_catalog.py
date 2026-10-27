@@ -60,6 +60,28 @@ class TestInstrument(unittest.TestCase):
                     Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", "General", invalid_value)
 
 
+
+    def test_rejects_non_text_company_id(self):
+        for invalid_value in (123, None):
+            with self.subTest(value=invalid_value):
+                with self.assertRaises(TypeError): Instrument("DEMO-A", invalid_value, "Empresa de ejemplo", "A", "General", None)
+
+    def test_rejects_non_text_company_name(self):
+        for invalid_value in (123, None):
+            with self.subTest(value=invalid_value):
+                with self.assertRaises(TypeError):Instrument("DEMO-A", "DEMO", invalid_value, "A", "General", None)
+
+    def test_rejects_non_text_share_class(self):
+        for invalid_value in (123, None):
+            with self.subTest(value= invalid_value):
+                with self.assertRaises(TypeError): Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", invalid_value, "General", None)
+
+    def test_rejects_non_text_panel(self):
+        for invalid_value in (123, None):
+            with self.subTest(value = invalid_value):
+                with self.assertRaises(TypeError):Instrument("DEMO-A", "DEMO", "Empresa de ejemplo", "A", invalid_value, None)
+
+
 class TestCatalogSnapshot(unittest.TestCase):
     """Comprueba la procedencia del catálogo y la conservación de sus instrumentos"""
 
