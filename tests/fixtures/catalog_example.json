@@ -1,0 +1,22 @@
+{
+  "reference_date": "2026-10-20",
+  "source_reference": "Listado ficticio para pruebas",
+  "instruments": [
+    {
+      "instrument_id": "DEMO-A",
+      "company_id": "DEMO",
+      "company_name": "Empresa de ejemplo",
+      "share_class": "A",
+      "panel": "General",
+      "source_symbol": "DEMO-A.BA"
+    },
+    {
+      "instrument_id": "DEMO-B",
+      "company_id": "DEMO",
+      "company_name": "Empresa de ejemplo",
+      "share_class": "B",
+      "panel": "General",
+      "source_symbol": null
+    }
+  ]
+}
