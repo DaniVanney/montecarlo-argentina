@@ -37,4 +37,31 @@ def load_catalog(path:Path) -> CatalogSnapshot:
         source_reference= data["source_reference"],
         instruments = tuple(instruments),
     )
-        
+
+def save_catalog(catalog: CatalogSnapshot, path: Path) -> None:
+    """Guarda el catálogo en un archivo nuevo sin reemplazar un existente"""
+    instruments = []
+
+    for instrument in catalog.instruments:
+        instruments.append(
+            {
+                "instrument_id": instrument.instrument_id,
+                "company_id": instrument.company_id,
+                "company_name": instrument.company_name,
+                "share_class": instrument.share_class,
+                "panel": instrument.panel,
+                "source_symbol": instrument.source_symbol,
+            }
+        )
+
+        #JSON necesita la fecha como texto y los instrumentos como una lista
+    data = {
+        "reference_date" : catalog.reference_date.isoformat(),
+        "source_reference": catalog.source_reference,
+        "instruments":instruments,
+        }
+
+        #El modo "X" evita sobreescribit una versión que ya guardamos
+    with path.open("x", encoding= "utf-8") as file:
+        json.dump(data, file, ensure_ascii = False, indent =4)
+        file.write("\n")   

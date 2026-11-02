@@ -5,7 +5,7 @@ import json
 from tempfile import TemporaryDirectory
 
 from src.catalog import Instrument
-from src.catalog_io import load_catalog
+from src.catalog_io import load_catalog, save_catalog
 
 class TestLoadCatalog(unittest.TestCase):
     """Comprueba que la lectura conserva los datos del archivo"""
@@ -43,3 +43,32 @@ class TestLoadCatalog(unittest.TestCase):
 
             with self.assertRaises(ValueError):
                 load_catalog(invalid_path)
+
+class TestCatalog(unittest.TestCase):
+    """Comprueba que podemos guardar el catálogo sin perder datos"""
+
+    def test_saves_and_same_catalog(self):
+        path = Path(__file__).parent / "fixtures" / "catalog_example.json"
+        original_catalog = load_catalog(path)
+
+        with TemporaryDirectory() as directory:
+            saved_path = Path(directory) /"saved_catalog.json"
+            save_catalog(original_catalog, saved_path)
+            recovered_catalog = load_catalog(saved_path)
+
+            self.assertEqual(recovered_catalog, original_catalog)
+
+    def test_preserves_existing_file(self):
+        path = Path(__file__).parent / "fixtures" / "catalog_example.json"
+        catalog = load_catalog(path)
+
+        with TemporaryDirectory() as directory:
+            existing_path = Path(directory) /"existing_catalog.json"
+            original_content = "Este archivo ya existía. \n"
+            existing_path.write_text(original_content, encoding = "utf-8")
+
+            with self.assertRaises(FileExistsError):
+                save_catalog(catalog, existing_path)
+
+            #Además del error, comprobamos que el contenido siga intacto
+            self.assertEqual(existing_path.read_text(encoding="utf-8"), original_content,)
