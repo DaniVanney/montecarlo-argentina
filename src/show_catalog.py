@@ -9,8 +9,14 @@ def main()-> None:
     parser.add_argument("path", type= Path, help= "Ruta del archivo JSON del catálogo.",)
 
     args = parser.parse_args()
+    try:
+        catalog = load_catalog(args.path)
+    except OSError as error:
+        parser.error(f"No se pudo abrir o leer el archivo: {error}")
+    except (ValueError, TypeError, KeyError) as error:
+        parser.error(f"El catálogo contiene datos inválidos o incompletos: {error}")
 
-    catalog = load_catalog(args.path)
+
     pending_instruments = catalog.instruments_without_symbol()
 
     print(f"Fecha de referencia: {catalog.reference_date}")
