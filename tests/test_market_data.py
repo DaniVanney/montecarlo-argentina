@@ -70,3 +70,31 @@ class TestDailyQuote(unittest.TestCase):
                                    close_price = prices[3],
                                    volume =1000,
                                    )
+
+    def make_quote_with_volume(self, volume):
+        #Usamos siempre los mismos precios para que no solo cambie el volumen
+        return DailyQuote(
+            instrument_id= "DEMO-A",
+            trading_date = date(2026, 10,20),
+            currency = "ARS",
+            open_price= 100.0,
+            high_price = 110.0,
+            low_price = 95.0,
+            close_price = 108.0,
+            volume = volume,
+        )
+
+    def test_preserves_reported_or_missing_volume(self):
+        for volume in (1000, 0, None):
+            quote = self.make_quote_with_volume(volume)
+            self.assertEqual(quote.volume, volume)
+
+    def test_rejects_non_integer_volume (self):
+        for volume in ("1000", 1.5, True):
+            with self.subTest(volume= volume):
+                with self.assertRaises(TypeError):
+                    self.make_quote_with_volume(volume)
+
+    def test_rejects_negative_volume(self):
+        with self.assertRaises(ValueError):
+            self.make_quote_with_volume(-1)

@@ -38,3 +38,11 @@ class DailyQuote:
             raise ValueError("La apertura debe estar entre el mínimo y el máximo.")
         if not self.low_price <= self.close_price <= self.high_price:
             raise ValueError("El cierre debe estar entre el mínimo y el máximo.")
+
+        #Si la fuente de datos informa el volumen, comprobamos que sea un conteo válido
+        if self.volume is not None:
+            if type(self.volume) is not int:
+                raise TypeError("El volúmen debe ser un número entero")
+
+            if self.volume < 0:
+                raise ValueError("El volumen no puede ser negativo")
