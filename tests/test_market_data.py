@@ -40,3 +40,33 @@ class TestDailyQuote(unittest.TestCase):
                         close_price = closing,
                         volume =1000,
                     )
+
+    def test_rejects_non_numeric_prices(self):
+        for position in range(4):
+            for invalid_value in ("100", None, True):
+                #Los otros tres precios quedan como en una rueda válida
+                prices = [100.0, 110.0, 95.0, 108.0]
+                prices[position] = invalid_value
+
+                with self.subTest(position=position, value = invalid_value):
+                    with self.assertRaises(TypeError):
+                        DailyQuote(instrument_id="DEMO-A", trading_date=(2026, 10, 20), currency= "ARS", open_prices = prices[0], high_prices=prices[1], low_prices = prices[2], close_price=prices[3], volume=1000,)
+
+
+    def test_rejects_non_positive_or_non_finite_prices(self):
+        for position in range(4):
+            for invalid_value in (0, -1, float("inf"), float("nan")):
+                prices = [100.0, 110.0, 95.0, 108.0]
+                prices[position] = invalid_value
+
+                with self.subTest(position= position, value = invalid_value):
+                    with self.assertRaisesRegex(ValueError, "positivos y finitos"):
+                        DailyQuote(instrument_id= "DEMO-A",
+                                   trading_date = date(2026, 10, 20),
+                                   currency= "ARS",
+                                   open_price = prices[0],
+                                   high_price = prices[1],
+                                   low_price = prices[2],
+                                   close_price = prices[3],
+                                   volume =1000,
+                                   )
