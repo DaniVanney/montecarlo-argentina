@@ -18,6 +18,20 @@ class DailyQuote:
     volume : int| None
 
     def __post_init__(self) -> None:
+        if not isinstance(self.instrument_id, str):
+            raise TypeError("El identificador del instrumento debe ser texto.")
+        if not self.instrument_id.strip():
+            raise ValueError("El identificador el instrumento no puede estar vacío.")
+
+        #La fecha corresponde a la rueda en la que se registran los precios
+        if type(self.trading_date) is not date:
+            raise TypeError("La fecha de la rueda debe ser una fecha sin hora.")
+        if not isinstance(self.currency, str):
+            raise TypeError("La moneda debe ser texto.")
+        if self.currency != "ARS":
+            raise ValueError("La cotización debe estar expresada en pesos argentinos (ARS).") 
+
+
         prices= (self.open_price,
                  self.high_price,
                  self.low_price,
@@ -46,3 +60,4 @@ class DailyQuote:
 
             if self.volume < 0:
                 raise ValueError("El volumen no puede ser negativo")
+            

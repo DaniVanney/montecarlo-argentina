@@ -1,5 +1,6 @@
 import unittest
-from datetime import date
+from datetime import date, datetime
+from dataclasses import replace
 
 from src.market_data import DailyQuote
 
@@ -98,3 +99,36 @@ class TestDailyQuote(unittest.TestCase):
     def test_rejects_negative_volume(self):
         with self.assertRaises(ValueError):
             self.make_quote_with_volume(-1)
+
+
+    def test_rejects_invalid_instrument_id(self):
+        quote = self.make_quote_with_volume(1000)
+
+        for value, expected_error in (
+            (123, TypeError),
+            ("", ValueError),
+            (" ", ValueError),
+        ):
+            with self.subTest(value= value):
+                with self.assertRaises(expected_error):
+                    replace(quote, instrument_id = value)
+
+    def test_rejects_invalid_trading_date(self):
+        quote = self.make_quote_with_volume(1000)
+
+        #Probamos una fecha escrita como texto y otra que incluye la hora.
+        for value in ("2026-10-20", datetime(2026, 10,20,12,0)):
+            with self.subTest(value=value):
+                with self.assertRaises(TypeError):
+                    replace(quote, trading=value)
+
+    def test_rejects_invalid_currency(self):
+        quote = self.make_quote_with_volume(1000)
+
+        for value, expected_error in (
+            (None, TypeError),
+            ("USD", ValueError),
+        ):
+            with self.subTest(value=value):
+                with self.assertRaises(expected_error):
+                    replace(quote, currency = value)
