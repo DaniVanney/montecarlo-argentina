@@ -2,7 +2,7 @@ import unittest
 from datetime import date, datetime
 from dataclasses import replace
 
-from src.market_data import DailyQuote
+from src.market_data import DailyQuote, check_duplicate_quotes
 
 class TestDailyQuote(unittest.TestCase):
     """Comprueba la coherencia de los precios de una cotización diaria """
@@ -132,3 +132,23 @@ class TestDailyQuote(unittest.TestCase):
             with self.subTest(value=value):
                 with self.assertRaises(expected_error):
                     replace(quote, currency = value)
+
+    def test_accepts_quotes_for_different_instruments_or_dates(self):
+        quote = self.make_quote_with_volume(1000)
+        other_instrument = replace(quote, instrument_id = "DEMO-B")
+        next_day = replace(quote, trading_date = date(2026, 10, 21))
+
+        #Las tres cotizaciones tiene el mismo cierre y las tres son válidas
+        check_duplicate_quotes((quote, other_instrument, next_day))
+
+    def test_rejects_duplicate_quotes_for_same_instruement_and_date(self):
+        quote = self.make_quote_with_volume(1000)
+        other_instrument = replace(quote, instrument_id= "DEMO-B")
+
+        for closing in (quote.close_price, 107.0):
+            with self.subTest(closing=closing):
+                duplicate = replace(quote, close_price= closing)
+
+                #El duplicado también debe detectase si hay otra fila en el medio
+                with self.assertRaises(ValueError):
+                    check_duplicate_quotes((quote, other_instrument, duplicate))

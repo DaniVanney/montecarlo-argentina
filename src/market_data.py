@@ -60,4 +60,15 @@ class DailyQuote:
 
             if self.volume < 0:
                 raise ValueError("El volumen no puede ser negativo")
-            
+
+def check_duplicate_quotes(quotes: tuple[DailyQuote,...]) -> None:
+    """Revisa que cada instrumento tenga una sola cotización por fecha """
+    seen = set()
+
+    for quote in quotes:
+        # La fecha sola no alcanza para distinguir dos acciones distintas
+        key = (quote.instrument_id, quote.trading_date)
+
+        if key in seen:
+            raise ValueError(f"Cotización duplicado para {quote.instrument_id}" f"el {quote.trading_date}")
+        seen.add(key)
